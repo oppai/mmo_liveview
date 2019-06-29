@@ -12,7 +12,7 @@ defmodule MmoLiveviewWeb.ThermostatView do
   def render(assigns) do
     ~L"""
     <form phx-change="change_name">
-      Name:<input width=400 name="name" />
+      Name:<input width=400 name="name" value="<%= get_myname(assigns) %>"/>
     </form>
     <div class="thermostat" phx-keydown="update_temp" phx-target="window">
       <svg x=0 y=0 width=500 height=500 style="background-color: #ddd">
@@ -26,6 +26,15 @@ defmodule MmoLiveviewWeb.ThermostatView do
     </div>
     <div><%= inspect(@list) %></div>
     """
+  end
+
+  defp get_myname(assigns) do
+    assigns.list
+    |> Enum.find(&(&1.id == assigns.my_id))
+    |> case do
+      nil -> ""
+      my -> my |> Map.get(:name)
+    end
   end
 
   @interval 50
